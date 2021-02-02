@@ -1,45 +1,47 @@
 package MyselfAndI
 
 import scalafx.scene.canvas.Canvas
-import scalafx.scene.paint.Color
+import helpers._
 
 class PipeCanvas() extends Canvas {
 
-  private val h = 100
-  private var w = 100
-  private val gapSize = 200
+  private val gapSize = 250
   private val GC = graphicsContext2D
-  private var pipes: Set[(Double, Double)] = Set((800, helpers.generateUpperY()))
-
-  def pipeCoords: Set[(Double, Double)] = pipes
+  private var pipes: List[Pipe] = List(Pipe(800,0, 100, generateUpperY()))
+  private var x: Double = 800
 
   def clear(): Unit = {
-    GC.clearRect(0, 0, width.value, height.value)
+    pipes.foreach(pipe => {
+      GC.clearRect(pipe.x, pipe.y, pipe.width, pipe.height)
+      GC.clearRect(pipe.x, pipe.height + gapSize, pipe.width, 600 - (pipe.y + gapSize))
+    })
   }
 
-  def drawPipes(x: Double, upperY: Double): Unit = {
-    GC.fillRect(x, 0, 100, upperY)
-    GC.fillRect(x, upperY + gapSize, 100, 600 - (upperY + gapSize))
-    pipes += ((x, upperY))
+  def drawPipes(): Unit = {
+    pipes.foreach(pipe => {
+      GC.fillRect(pipe.x, pipe.y, pipe.width, pipe.height)
+      GC.fillRect(pipe.x, pipe.height + gapSize, pipe.width, 600 - (pipe.height + gapSize))
+    })
+  }
+
+  def addPipes(): Unit = {
+    pipes = Pipe(800, 0, 100, generateUpperY()) :: pipes
   }
 
   def increaseX(): Unit = {
-    w += 1
+    x -= 1
+    if (x % 200 == 0) {
+      addPipes()
+    }
+    pipes = pipes.map(pipe => {
+      Pipe(pipe.x-1, pipe.y, pipe.width, pipe.height)
+    })
   }
 
-  def draw(upperY: Double): Unit = {
-    println(s"Y COORDS: $upperY")
-
-//    clear(upperY)
-    //clear(stageWidth - w, upperY + gapSize, 100, stageHeight)
-    //GC2.clearRect(0, 0, 800, 600)
-    //GC.fillRect(stageWidth - w, 0, 100, upperY)
+  def draw(): Unit = {
+    clear()
     increaseX()
-    //drawBottomPipe()
-//    drawPipe(upperY)
-
+    drawPipes()
   }
-
-
 
 }

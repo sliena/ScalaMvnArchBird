@@ -2,7 +2,7 @@ package MyselfAndI
 
 object helpers {
 
-  case class Pipe(x: Double, y: Double)
+  case class Pipe(x: Double, y: Double, width: Double, height: Double)
 
   // generate Y coordinates for upper pipe
   def generateUpperY(): Double = {
@@ -11,9 +11,4 @@ object helpers {
     val rnd = new scala.util.Random
     start + rnd.nextInt( (end - start) + 1 ).toDouble
   }
-
-  def update(pipes: Set[Pipe]): Set[Pipe] = {
-    pipes.map(p => Pipe(p.x - 1, p.y))
-  }
-
 }

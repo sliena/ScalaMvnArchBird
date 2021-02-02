@@ -1,17 +1,10 @@
 package MyselfAndI
 
-import javafx.beans.property.SimpleDoubleProperty
-import scalafx.scene.canvas.Canvas
-import scalafx.scene.input.MouseEvent
-import scalafx.scene.input.MouseEvent.{MouseClicked, MouseDragged}
-import scalafx.scene.paint.Color
+
+import scalafx.scene.input.MouseEvent.MouseClicked
 import scalafx.Includes._
-import scalafx.beans.property.DoubleProperty
-import scalafx.event.Event
-import scalafx.event.EventIncludes._
 import scalafx.scene.canvas.Canvas
 import scalafx.scene.input.MouseEvent
-import scalafx.scene.input.MouseEvent._
 import scalafx.scene.paint.Color
 
 class BirdCanvas(color: Color, scale: Int, delta_time: Float) extends Canvas {
@@ -51,6 +44,9 @@ class BirdCanvas(color: Color, scale: Int, delta_time: Float) extends Canvas {
 
   def clear(): Unit = GC.clearRect(Y, X, w * scale, h * scale)
 
+  /**
+   * Clears old bird, calculates and adds velocity, and draws new bird at new coordinates.
+   */
   def draw(): Unit = {
     //println(s"velocity: " + velocity)
     clear()
@@ -58,8 +54,6 @@ class BirdCanvas(color: Color, scale: Int, delta_time: Float) extends Canvas {
     addVelocityX()
     drawBird()
   }
-
-
 
   handleEvent(MouseEvent.Any) {
     e: MouseEvent => e.eventType match {
